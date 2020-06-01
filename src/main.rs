@@ -1,46 +1,26 @@
-fn combine(n: u8, k: u8, current_number: u8, results: &mut Vec<Vec<u8>>, stack: &mut Vec<u8>) {
-    if stack.len() == k as usize {
-        results.push(stack.clone());
-        return;
-    }
-    if current_number > n {
-        return;
-    }
-    stack.push(current_number);
-    combine(n, k, current_number + 1, results, stack);
-    stack.pop();
-    combine(n, k, current_number + 1, results, stack);
-}
+use std::env;
 
-fn list_combos(n: u8, k: u8) -> Vec<Vec<u8>> {
-    let mut results: Vec<Vec<u8>> = vec![];
-    let mut stack: Vec<u8> = vec![];
-    combine(n, k, 0, &mut results, &mut stack);
-    results
-}
+mod list_combos;
+
 fn main() {
-    let combos = list_combos(7, 5);
-    println!("{:?}", combos)
-}
-
-#[test]
-fn it_enumerates_combos() {
-    let test_results = list_combos(4, 2);
-    assert_eq!(
-        test_results,
-        vec![
-            [0, 1],
-            [0, 2],
-            [0, 3],
-            [0, 4],
-            [1, 2],
-            [1, 3],
-            [1, 4],
-            [2, 3],
-            [2, 4],
-            [3, 4]
-        ]
-    );
-    let all_poker_hands = list_combos(52, 5);
-    assert_eq!(all_poker_hands.len(), 2869685)
+  let args: Vec<String> = env::args().collect();
+  println!("{:?}", args);
+  let n = &args[1].parse::<u8>();
+  let k = &args[2].parse::<u8>();
+  let n = match n {
+    Ok(x) => x,
+    Err(error) => panic!(
+      "Problem parsing &args[1] as u8: {:?}, {:?}",
+      &args[1], error
+    ),
+  };
+  let k = match k {
+    Ok(x) => x,
+    Err(error) => panic!(
+      "Problem parsing &args[2] as u8: {:?}, {:?}",
+      &args[2], error
+    ),
+  };
+  let combos = list_combos::list_combos(*n, *k);
+  println!("{:?}", combos);
 }
