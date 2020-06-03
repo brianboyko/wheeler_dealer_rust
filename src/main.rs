@@ -1,6 +1,7 @@
 use std::env;
 
 mod list_combos;
+mod cards;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
